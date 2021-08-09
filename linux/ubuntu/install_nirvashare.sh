@@ -1,6 +1,8 @@
 #!/bin/bash
 
-echo "NS_DBPASSWORD = $NS_DBPASSWORD"
+echo ""
+echo "Starting to install NirvaShare application."
+echo ""
 
 
 if [ -z "$NS_DBPASSWORD" ]
@@ -16,9 +18,6 @@ done
 
 fi
 
-
-
-exit 0
 
 # stack script
 
