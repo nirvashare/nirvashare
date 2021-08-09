@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "NS_DBPASSWORD = $NS_DBPASSWORD"
+
 if [[ -z "${NS_DBPASSWORD}" ]]; then
 
 while true; do
