@@ -2,8 +2,9 @@
 
 echo "NS_DBPASSWORD = $NS_DBPASSWORD"
 
-if [[ -z "${NS_DBPASSWORD}" ]]; then
 
+if [ -z "$NS_DBPASSWORD" ]
+then
 while true; do
   read -s -p "Enter database password: " NS_DBPASSWORD
   echo
