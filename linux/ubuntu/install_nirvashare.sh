@@ -16,6 +16,9 @@ done
 fi
 
 
+
+exit 0
+
 # stack script
 
 sudo apt update
