@@ -12,14 +12,12 @@ while true; do
   echo
   read -s -p "Confirm database password: " NS_DBPASSWORD2
   echo
-  [ "$password" = "$password2" ] && break
+  [ "$NS_DBPASSWORD" = "$NS_DBPASSWORD2" ] && break
   echo "Passwords not matching, please re-enter"
 done
 
 fi
 
-
-# stack script
 
 sudo apt update
 # docker
@@ -45,62 +43,11 @@ sudo chmod +x /usr/local/bin/docker-compose
 # NirvaShare installation
 
 mkdir -p /var/nirvashare
+sudo curl -L "https://raw.githubusercontent.com/nirvashare/nirvashare/main/docker/common/install-app.yml" -o /var/nirvashare/install_file
 
-
-echo "version: '3'
-services:
-  admin:
-    image: nirvato/nirvashare-admin:latest
-    container_name: nirvashare_admin
-    networks:
-      - nirvashare
-    restart: always
-    ports:
-#      # Public HTTP Port:
-      - 8080:8080
-    environment:
-      ns_db_jdbc_url: 'jdbc:postgresql://nirvashare_database:5432/postgres'
-      ns_db_username: 'nirvashare'
-      ns_db_password: '$NS_DBPASSWORD'
-     
-    depends_on:
-      - db
-
-
-  userapp:
-    image: nirvato/nirvashare-userapp:latest
-    container_name: nirvashare_userapp
-    networks:
-      - nirvashare
-    restart: always
-    ports:
-#      # Public HTTP Port:
-      - 8081:8080
-    environment:
-      ns_db_jdbc_url: 'jdbc:postgresql://nirvashare_database:5432/postgres'
-      ns_db_username: 'nirvashare'
-      ns_db_password: '$NS_DBPASSWORD'
-      
-    depends_on:
-      - admin
-
-  db:
-   image: postgres:latest
-   networks:
-      - nirvashare
-   container_name: nirvashare_database
-   restart: always
-#   ports:
-#        - 5432:5432
-   environment: 
-     POSTGRES_PASSWORD: '$NS_DBPASSWORD'
-     POSTGRES_USER: 'nirvashare'
-
-networks:
-  nirvashare: {}
-"  > /var/nirvashare/install-app.yml
-
+cat /var/nirvashare/install_file  | sed -e "s/__DB_PASS__/$NS_DBPASSWORD/" >> /var/nirvashare/install-app.yml
 
 docker-compose -f /var/nirvashare/install-app.yml up -d
+
 
 
