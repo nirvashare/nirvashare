@@ -5,6 +5,13 @@ echo "Starting to install NirvaShare application."
 echo ""
 
 
+if [ "$NS_RANDOM_PASSWORD" = "true" ]
+then
+        echo "Generating a random database password"
+        NS_DBPASSWORD=$(openssl rand -hex 6)
+fi
+
+
 if [ -z "$NS_DBPASSWORD" ]
 then
 while true; do
