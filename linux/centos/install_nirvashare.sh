@@ -27,7 +27,7 @@ done
 fi
 
 
-yum -y update
+#yum -y update
 # docker
 yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 
