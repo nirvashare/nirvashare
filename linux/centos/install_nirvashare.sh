@@ -31,9 +31,11 @@ fi
 
 
 # Remove any old versions
+echo "Cleaning up existing installation if any"
 sudo yum remove docker docker-common docker-selinux docker-engine
 
 # Install required packages
+echo "Installing required packages"
 sudo yum install -y yum-utils device-mapper-persistent-data lvm2
 
 # Configure docker repository
@@ -70,7 +72,7 @@ echo "Installation Complete -- Logout and Log back"
 docker-compose --version
 
 # NirvaShare installation
-
+echo "Installing NirvaShare services"
 mkdir -p /var/nirvashare
 sudo curl -L "https://raw.githubusercontent.com/nirvashare/nirvashare/main/docker/common/install-app.yml" -o /var/nirvashare/install_file
 
