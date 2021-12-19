@@ -28,34 +28,46 @@ fi
 
 
 #yum -y update
-# docker
-yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-
-yum -y install yum-utils device-mapper-persistent-data lvm2
-yum -y install docker-ce -y
-
-mkdir -p /etc/systemd/system/docker.service.d
-touch /etc/systemd/system/docker.service.d/docker.conf
-mkdir -p /etc/docker
 
 
-systemctl start docker
+# Remove any old versions
+sudo yum remove docker docker-common docker-selinux docker-engine
 
-systemctl enable docker
+# Install required packages
+sudo yum install -y yum-utils device-mapper-persistent-data lvm2
 
-echo
-systemctl status docker
-echo
-journalctl -u docker --no-pager
-echo
-docker info
+# Configure docker repository
+sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+# Install Docker-ce
+sudo yum install docker-ce -y
+
+# Start Docker
+sudo systemctl start docker
+sudo systemctl enable docker
+
+# Post Installation Steps
+# Create Docker group
+sudo groupadd docker
+
+# Add user to the docker group
+sudo usermod -aG docker $USER
 
 
 # docker-compose
 
-sudo curl -L "https://github.com/docker/compose/releases/download/1.25.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+# Install docker-compose
+curl -L "https://github.com/docker/compose/releases/download/1.25.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 
-sudo chmod +x /usr/local/bin/docker-compose
+# Permssion +x execute binary
+chmod +x /usr/local/bin/docker-compose
+
+# Create link symbolic 
+ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+
+# Check Version docer-compose
+echo "Installation Complete -- Logout and Log back"
+docker-compose --version
 
 # NirvaShare installation
 
