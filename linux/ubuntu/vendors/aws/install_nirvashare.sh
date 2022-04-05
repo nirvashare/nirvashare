@@ -55,6 +55,7 @@ INSTANCEID=$(curl -sL http://169.254.169.254/latest/meta-data/instance-id)
 
 echo "$INSTANCEID" >/var/nirvashare/set_password
 
+docker-compose -f /var/nirvashare/install-app.yml pull
 docker-compose -f /var/nirvashare/install-app.yml up -d
 
 
