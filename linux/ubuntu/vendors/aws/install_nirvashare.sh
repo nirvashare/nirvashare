@@ -51,9 +51,6 @@ sudo curl -L "https://raw.githubusercontent.com/nirvashare/nirvashare/main/docke
 
 cat /var/nirvashare/install_file  | sed -e "s/__DB_PASS__/$NS_DBPASSWORD/" >> /var/nirvashare/install-app.yml
 
-INSTANCEID=$(curl -sL http://169.254.169.254/latest/meta-data/instance-id) 
-
-echo "$INSTANCEID" >/var/nirvashare/set_password
 
 docker-compose -f /var/nirvashare/install-app.yml pull
 docker-compose -f /var/nirvashare/install-app.yml up -d
@@ -61,6 +58,25 @@ docker-compose -f /var/nirvashare/install-app.yml up -d
 
 set -e
 echo "Waiting for NirvaShare application to start..."
+count=0
+
+until curl --output /dev/null --silent --head --fail "http://localhost:8080/actuator/health"; do
+  >&2 echo "Adminconsole is unavailable - sleeping"
+  count=$(( count + 1 ))
+  if [ $count -eq 30 ];then
+	break
+  fi
+  sleep 3
+done
+>&2 echo "AdminConsole is up"
+
+echo "Changing admin password"
+INSTANCEID=$(curl -sL http://169.254.169.254/latest/meta-data/instance-id) 
+echo "$INSTANCEID" >/var/nirvashare/set_password
+
+docker restart nirvashare_admin
+echo "Restarted adminconsole"
+echo "Waiting for Adminconsole application to start..."
 count=0
 
 until curl --output /dev/null --silent --head --fail "http://localhost:8080/actuator/health"; do
