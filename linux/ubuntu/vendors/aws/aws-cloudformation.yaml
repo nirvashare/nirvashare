@@ -1,0 +1,55 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  
+  ## Security group for NirvaShare WebInstance enabling port 8080 and 8081
+  ## Port 22 for console access
+  WebSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: NirvaShare security group
+      GroupName: WebSecurityGroup     
+#      VpcId: vpc-abc01234
+      SecurityGroupIngress:
+        -
+          IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        -
+          IpProtocol: tcp
+          FromPort: 8080
+          ToPort: 8080
+          CidrIp: 0.0.0.0/0
+        -
+          IpProtocol: tcp
+          FromPort: 8081
+          ToPort: 8081
+          CidrIp: 0.0.0.0/0
+ 
+  ## EC2 Instance
+  WebInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      BlockDeviceMappings:
+        -
+          DeviceName: "/dev/sda1"
+          Ebs:
+            VolumeSize: 40
+            VolumeType: gp2
+      InstanceType: t2.medium
+      ImageId: ami-04505e74c0741db8d
+#      KeyName: my-key
+      Monitoring: true
+      SecurityGroupIds:
+        - !Ref WebSecurityGroup
+      UserData:
+        Fn::Base64: 
+          !Sub |
+            #!/bin/bash            
+            curl -s https://raw.githubusercontent.com/nirvashare/nirvashare/main/linux/ubuntu/vendors/aws/install_nirvashare.sh -o ns_install.sh && bash ns_install.sh && rm -f ns_install.sh
+      Tags:
+        -
+          Key: Name
+          Value: NirvaShare
+  
+
