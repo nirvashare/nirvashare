@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Resources:
   
-  ## Security group for NirvaShare WebInstance enabling port 8080 and 8081
+  ## Security group for NirvaShare services enabling port 8080 and 8081
   ## Port 22 for console access
   WebSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -43,6 +43,13 @@ Resources:
       SecurityGroupIds:
         - !Ref WebSecurityGroup
       UserData:
+#	* Installs docker and docker-conpose community edition
+#	* Installs postgres database as docker service.
+#	* Sets randomized database password.
+#	* Installs NirvaShare Admin Console as docker service.
+#	* Sets default admin password as EC2 instance id
+#	* Installs NirvaShare User application as docker service.
+#
         Fn::Base64: 
           !Sub |
             #!/bin/bash            

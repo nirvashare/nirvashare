@@ -66,7 +66,7 @@ until curl --output /dev/null --silent --head --fail "http://localhost:8080/actu
   if [ $count -eq 30 ];then
 	break
   fi
-  sleep 3
+  sleep 5
 done
 >&2 echo "AdminConsole is up"
 
