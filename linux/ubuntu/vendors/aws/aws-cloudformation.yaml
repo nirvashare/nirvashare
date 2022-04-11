@@ -1,6 +1,12 @@
 AWSTemplateFormatVersion: "2010-09-09"
+
+Mappings: 
+  RegionMap: 
+    us-east-1: 
+      "HVM64": "ami-04505e74c0741db8d"
+
 Resources:
-  
+
   ## Security group for NirvaShare services enabling port 8080 and 8081
   ## Port 22 for console access
   WebSecurityGroup:
@@ -37,9 +43,10 @@ Resources:
             VolumeSize: 40
             VolumeType: gp2
       InstanceType: t2.medium
-      ImageId: ami-04505e74c0741db8d
+#      ImageId: ami-04505e74c0741db8d
+      ImageId: !FindInMap [RegionMap, !Ref "AWS::Region", HVM64]
 #      KeyName: my-key
-      Monitoring: true
+      Monitoring: false
       SecurityGroupIds:
         - !Ref WebSecurityGroup
       UserData:
