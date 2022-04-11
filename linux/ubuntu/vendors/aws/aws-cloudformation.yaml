@@ -4,6 +4,18 @@ Mappings:
   RegionMap: 
     us-east-1: 
       "HVM64": "ami-04505e74c0741db8d"
+    us-east-2:
+      "HVM64": "ami-0fb653ca2d3203ac1"
+    us-west-1:
+      "HVM64": "ami-01f87c43e618bf8f0"
+    us-west-2:
+      "HVM64": "ami-0892d3c7ee96c0bf7"
+    eu-west-1:
+      "HVM64": "ami-08ca3fed11864d6bb"
+    ap-southeast-1:
+      "HVM64": "ami-055d15d9cfddf7bd3"
+    ap-northeast-1:
+      "HVM64": "ami-088da9557aae42f39"
 
 Resources:
 
@@ -40,7 +52,7 @@ Resources:
         -
           DeviceName: "/dev/sda1"
           Ebs:
-            VolumeSize: 40
+            VolumeSize: 100
             VolumeType: gp2
       InstanceType: t2.medium
 #      ImageId: ami-04505e74c0741db8d
