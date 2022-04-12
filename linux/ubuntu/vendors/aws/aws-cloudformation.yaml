@@ -3,7 +3,7 @@ AWSTemplateFormatVersion: "2010-09-09"
 Mappings: 
   RegionMap: 
     us-east-1: 
-      "HVM64": "ami-0c9b9aa8481ea3a8b"
+      "HVM64": "ami-0c34eb6163fecee19"
 
 Resources:
 
