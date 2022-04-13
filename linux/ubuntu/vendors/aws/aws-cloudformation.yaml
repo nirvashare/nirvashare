@@ -5,8 +5,30 @@ Mappings:
     us-east-1: 
       "HVM64": "ami-0c34eb6163fecee19"
 
-Resources:
+Parameters:
+  InstanceTypeParameter:
+    Type: String
+    Default: t2.medium
+    Description: Instance type    
+    AllowedValues:
+      - t2.medium
+      - t2.large
+      - t2.xlarge      
+      - t3.medium
+      - t3.large
+      - t3.xlarge
 
+  CidrBlock:
+    AllowedPattern: '((\d{1,3})\.){3}\d{1,3}/\d{1,2}'
+    Default: 0.0.0.0/0
+    Description: VPC CIDR Block (eg 10.0.0.0/16)
+    Type: String
+
+  SSHKey:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: key pair to ssh into EC2 instance
+    
+Resources:
   ## Security group for NirvaShare services enabling port 8080 and 8081
   ## Port 22 for console access
   WebSecurityGroup:
@@ -20,17 +42,17 @@ Resources:
           IpProtocol: tcp
           FromPort: 22
           ToPort: 22
-          CidrIp: 0.0.0.0/0
+          CidrIp: !Ref CidrBlock
         -
           IpProtocol: tcp
           FromPort: 8080
           ToPort: 8080
-          CidrIp: 0.0.0.0/0
+          CidrIp: !Ref CidrBlock
         -
           IpProtocol: tcp
           FromPort: 8081
           ToPort: 8081
-          CidrIp: 0.0.0.0/0
+          CidrIp: !Ref CidrBlock
  
   ## EC2 Instance
   WebInstance:
@@ -42,10 +64,10 @@ Resources:
           Ebs:
             VolumeSize: 100
             VolumeType: gp2
-      InstanceType: t2.medium
-#      ImageId: ami-04505e74c0741db8d
+      InstanceType:
+        Ref: InstanceTypeParameter
       ImageId: !FindInMap [RegionMap, !Ref "AWS::Region", HVM64]
-#      KeyName: my-key
+      KeyName: !Ref SSHKey
       Monitoring: false
       SecurityGroupIds:
         - !Ref WebSecurityGroup
