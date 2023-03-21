@@ -39,6 +39,26 @@ services:
     depends_on:
       - admin
 
+  search:
+    image: 'nirvato/nirvashare-search:latest'
+    container_name: 'nirvashare_search'
+    networks:
+      - nirvashare
+    restart: always
+    ports:
+#      # Public HTTP Port:
+#      - '8081:8080'
+    environment:
+      ns_db_jdbc_url: "jdbc:postgresql://nirvashare_database:5432/postgres"
+      ns_db_username: "nirvashare"
+      ns_db_password: "__DB_PASS__"
+    volumes:
+      - /var/nirvashare:/var/nirvashare
+      
+    depends_on:
+      - admin
+
+
 
   db:
    image: 'postgres:13.2'
