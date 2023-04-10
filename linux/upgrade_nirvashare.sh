@@ -12,7 +12,7 @@ terminate()
 
 cleanup()
 {
-    rm /var/nirvashare/install_file > /dev/null
+    rm /var/nirvashare/install_file &>/dev/null
 }
 
 
@@ -49,7 +49,9 @@ fi
 
 echo ""
 echo ""
+cleanup
 
+exit 0
 
 if [ -f "$DOCKER_FILE" ]; then
     #check if install file has search feature.
