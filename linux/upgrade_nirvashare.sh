@@ -10,13 +10,19 @@ terminate()
     exit 1
 }
 
+cleanup()
+{
+    rm /var/nirvashare/install_file
+}
+
+
 update_configuration()
 {
     echo "Updating configuration"
     sudo curl -L "https://raw.githubusercontent.com/nirvashare/nirvashare/main/docker/common/install-app.yml" -o /var/nirvashare/install_file
     line=$(grep -m1 "ns_db_password" $DOCKER_FILE)
     NS_PASSWORD=`echo "$line" | cut -d'"' -f 2`
-    mv $DOCKER_FILE ${DOCKER_FILE}_del
+    mv $DOCKER_FILE ${DOCKER_FILE}.del
     cat /var/nirvashare/install_file  | sed -e "s/__DB_PASS__/$NS_PASSWORD/" > $DOCKER_FILE
 }
 
@@ -57,12 +63,12 @@ fi
 
 
 
-
-
 update_nirvashare
-#docker-compose -f /var/nirvashare/install-app.yml up -d
+cleanup
+
 
 echo ""
-echo "Installation Completed."
+echo "Upgrade Completed."
+echo ""
 
 

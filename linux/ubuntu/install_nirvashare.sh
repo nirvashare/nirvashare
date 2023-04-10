@@ -56,5 +56,6 @@ cat /var/nirvashare/install_file  | sed -e "s/__DB_PASS__/$NS_DBPASSWORD/" >> /v
 
 docker-compose -f /var/nirvashare/install-app.yml up -d
 
-
+echo ""
+echo "Installation Completed."
 
