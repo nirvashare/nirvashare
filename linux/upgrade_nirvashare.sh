@@ -49,9 +49,6 @@ fi
 
 echo ""
 echo ""
-cleanup
-
-exit 0
 
 if [ -f "$DOCKER_FILE" ]; then
     #check if install file has search feature.
