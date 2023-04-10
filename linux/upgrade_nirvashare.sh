@@ -12,7 +12,7 @@ terminate()
 
 cleanup()
 {
-    rm /var/nirvashare/install_file
+    rm /var/nirvashare/install_file > /dev/null 2>&1
 }
 
 
