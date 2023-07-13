@@ -69,5 +69,7 @@ cleanup
 echo ""
 echo "Upgrade Completed."
 echo ""
+echo "NOTE - Please wait for couple minutes for services to start automatically. Warning on Orphan conainers can be ignored. "
+echo ""
 
 
