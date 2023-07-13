@@ -28,7 +28,8 @@ update_configuration()
 
 update_nirvashare()
 {
-    echo "Updating application"
+    echo "Updating applications"
+    echo ""
     docker-compose -f $DOCKER_FILE pull
     docker-compose -f $DOCKER_FILE up -d
 }
