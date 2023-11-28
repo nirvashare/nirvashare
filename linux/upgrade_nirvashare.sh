@@ -41,12 +41,14 @@ echo "NirvaShare Upgrade Utility."
 echo ""
 
 echo "This will upgrade NirvaShare applications to latest version."
-read -p "Do you want to continue? (y/n) " -n 1 -r
-echo    # (optional) move to a new line
-if [[ ! $REPLY =~ ^[Yy]$ ]]
-then
-   terminate;
-fi
+while true; do
+    read -p "Do you want to continue? (y/n)? " yn
+    case $yn in
+        [Yy] ) break;;
+        [Nn] ) terminate; exit;;
+        * ) echo "Please answer yes or no (y/n).";;
+    esac
+done
 
 echo ""
 echo ""
@@ -70,7 +72,7 @@ cleanup
 echo ""
 echo "Upgrade Completed Successfully!"
 echo ""
-echo "NOTE - Please wait for couple minutes for services to start automatically. Warning on Orphan containers can be ignored. "
+echo "NOTE - Please wait for couple minutes for the services to start automatically. Warning on Orphan containers can be ignored. "
 echo ""
 
 

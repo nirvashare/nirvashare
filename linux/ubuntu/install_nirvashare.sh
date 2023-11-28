@@ -1,7 +1,15 @@
 #!/bin/bash
 
+terminate()
+{
+    echo ""
+    echo "Installation terminated"
+    exit 0
+}
+
+
 echo ""
-echo "Starting to install NirvaShare application."
+echo "NirvaShare Software Installation."
 echo ""
 
 
@@ -14,14 +22,46 @@ fi
 
 if [ -z "$NS_DBPASSWORD" ]
 then
+
+echo "This utility will install NirvaShare software."
+echo ""
+while true; do
+    read -p "Do you want to continue? (y/n)? " yn
+    case $yn in
+        [Yy] ) break;;
+        [Nn] ) terminate; exit;;
+        * ) echo "Please answer yes or no (y/n).";;
+    esac
+done
+
 while true; do
   read -s -p "Enter database password: " NS_DBPASSWORD
   echo
   read -s -p "Confirm database password: " NS_DBPASSWORD2
   echo
-  [ "$NS_DBPASSWORD" = "$NS_DBPASSWORD2" ] && break
-  echo "Passwords not matching, please re-enter"
+  size=${#NS_DBPASSWORD}
+  
+  if [ "${size}" -lt "6"  ] 
+  then 
+       echo "Password length should be atleast 6 characters."
+  elif   [ "$NS_DBPASSWORD" != "$NS_DBPASSWORD2"   ] 
+  then 
+       echo "Passwords not matching, please re-enter"
+   else 
+   break
+
+   fi	  
+  
 done
+fi
+
+
+
+if [ -e /var/nirvashare/install-app.yml ]
+then
+    echo
+    echo "NirvaShare is already installed in this system."
+    terminate
 
 fi
 
@@ -43,7 +83,8 @@ sudo apt install -yq docker-ce
 
 # docker-compose
 
-sudo curl -L "https://github.com/docker/compose/releases/download/1.25.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+sudo curl -L "https://github.com/docker/compose/releases/download/v2.23.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 
 sudo chmod +x /usr/local/bin/docker-compose
 

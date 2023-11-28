@@ -25,6 +25,13 @@ done
 
 fi
 
+if [ -e /var/nirvashare/install-app.yml ]
+then
+    echo
+    echo "NirvaShare is already installed in this system."
+    exit 0;
+
+fi
 
 sudo apt update
 # docker
