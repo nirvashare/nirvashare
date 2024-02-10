@@ -12,11 +12,10 @@ services:
     environment:
       ns_db_jdbc_url: "jdbc:postgresql://nirvashare_database_test:5432/postgres"
       ns_db_username: "nirvashare"
-#      ns_db_password: "__DB_PASS__"
       ns_db_password_file: "/run/secrets/db_password"
 
-   secrets:
-     - db_password
+    secrets:
+      - db_password
 
     volumes:
       - /var/nirvashare:/var/nirvashare
@@ -37,11 +36,10 @@ services:
     environment:
       ns_db_jdbc_url: "jdbc:postgresql://nirvashare_database_test:5432/postgres"
       ns_db_username: "nirvashare"
-#      ns_db_password: "__DB_PASS__"
       ns_db_password_file: "/run/secrets/db_password"
 
-   secrets:
-     - db_password
+    secrets:
+      - db_password
 
     volumes:
       - /var/nirvashare:/var/nirvashare
@@ -61,11 +59,10 @@ services:
     environment:
       ns_db_jdbc_url: "jdbc:postgresql://nirvashare_database_test:5432/postgres"
       ns_db_username: "nirvashare"
-#      ns_db_password: "__DB_PASS__"
       ns_db_password_file: "/run/secrets/db_password"
       
-   secrets:
-     - db_password
+    secrets:
+      - db_password
 
     volumes:
       - /var/nirvashare:/var/nirvashare
