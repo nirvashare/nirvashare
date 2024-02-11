@@ -1,10 +1,25 @@
 #!/bin/bash
 
+DB_PASS_FILE=/var/nirvashare/dbpass
+
 terminate()
 {
     echo ""
     echo "Installation terminated"
     exit 0
+}
+
+
+create_pass_file()
+{
+
+    if [ -f "$DB_PASS_FILE" ]; then
+    	echo "Password file already exists"
+    	terminate; exit;
+    else 
+    	# create the password file
+        echo $NS_DBPASSWORD > ${DB_PASS_FILE}    
+    fi
 }
 
 
@@ -66,6 +81,7 @@ then
 fi
 
 
+
 sudo apt update
 # docker
 
@@ -91,9 +107,11 @@ sudo chmod +x /usr/local/bin/docker-compose
 # NirvaShare installation
 
 mkdir -p /var/nirvashare
+create_pass_file
+
 sudo curl -L "https://raw.githubusercontent.com/nirvashare/nirvashare/main/docker/common/install-app.yml" -o /var/nirvashare/install_file
 
-cat /var/nirvashare/install_file  | sed -e "s/__DB_PASS__/$NS_DBPASSWORD/" >> /var/nirvashare/install-app.yml
+#cat /var/nirvashare/install_file  | sed -e "s/__DB_PASS__/$NS_DBPASSWORD/" >> /var/nirvashare/install-app.yml
 
 docker-compose -f /var/nirvashare/install-app.yml up -d
 
