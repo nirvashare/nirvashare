@@ -1,0 +1,33 @@
+version: "3"
+services:
+
+  ftps:
+    image: 'nirvato/nirvashare-ftps:latest'
+    container_name: 'nirvashare_ftps'
+    user: root
+    networks:
+      - nirvashare
+    restart: always
+    ports:
+      # Public HTTP Port:
+      - '21:8021'
+      - '65000-65500:65000-65500/tcp'
+    environment:
+      ns_db_jdbc_url: "jdbc:postgresql://nirvashare_database:5432/postgres"
+      ns_db_username: "nirvashare"
+      ns_db_password_file: "/run/secrets/db_password"
+      
+    secrets:
+      - db_password
+
+    volumes:
+      - /var/nirvashare:/var/nirvashare
+
+secrets:
+   db_password:
+     file: dbpass
+
+networks:
+  nirvashare: {}
+
+
