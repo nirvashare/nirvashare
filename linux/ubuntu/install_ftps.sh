@@ -61,10 +61,10 @@ fi
 
 
 
-if [ -e /var/nirvashare/install-app.yml ]
+if [ -e /var/nirvashare/install-ftps.yml ]
 then
     echo
-    echo "NirvaShare is already installed in this system."
+    echo "FTPS is already installed in this system."
     terminate
 
 fi
