@@ -116,11 +116,9 @@ sudo usermod -aG docker $USER
 
 # docker-compose
 
-# Install docker-compose
-curl -L "https://github.com/docker/compose/releases/download/1.25.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo curl -L "https://github.com/docker/compose/releases/download/v2.23.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 
-# Permssion +x execute binary
-chmod +x /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
 
 # Create link symbolic 
 ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
@@ -138,7 +136,7 @@ create_pass_file
 sudo curl -L "https://raw.githubusercontent.com/nirvashare/nirvashare/main/docker/common/install-app.yml" -o /var/nirvashare/install-app.yml
 
 #cat /var/nirvashare/install_file  | sed -e "s/__DB_PASS__/$NS_DBPASSWORD/" >> /var/nirvashare/install-app.yml
-
+export COMPOSE_IGNORE_ORPHANS=true
 docker-compose -f /var/nirvashare/install-app.yml up -d
 echo ""
 echo "Installation Completed."

@@ -115,10 +115,10 @@ sudo chmod +x /usr/local/bin/docker-compose
 mkdir -p /var/nirvashare
 create_pass_file
 
-sudo curl -L "https://raw.githubusercontent.com/nirvashare/nirvashare/main/docker/common/install-app.yml" -o /var/nirvashare/install_file
+sudo curl -L "https://raw.githubusercontent.com/nirvashare/nirvashare/main/docker/common/install-app.yml" -o /var/nirvashare/install-app.yml
 
-cat /var/nirvashare/install_file  | sed -e "s/__DB_PASS__/$NS_DBPASSWORD/" >> /var/nirvashare/install-app.yml
-
+#cat /var/nirvashare/install_file  | sed -e "s/__DB_PASS__/$NS_DBPASSWORD/" >> /var/nirvashare/install-app.yml
+export COMPOSE_IGNORE_ORPHANS=true
 docker-compose -f /var/nirvashare/install-app.yml up -d
 
 echo ""
