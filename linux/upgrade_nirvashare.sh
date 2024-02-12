@@ -109,7 +109,7 @@ cleanup
 echo ""
 echo "Upgrade Completed Successfully!"
 echo ""
-echo "NOTE - Please wait for couple of minutes for the services to start automatically. Warning on Orphan containers can be ignored. "
+echo "NOTE - Please wait for couple of minutes for the services to start automatically.
 echo ""
 
 
