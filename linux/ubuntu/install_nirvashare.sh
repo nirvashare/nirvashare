@@ -1,5 +1,11 @@
 #!/bin/bash
 
+#
+# Ubuntu installation script
+#
+
+
+
 DB_PASS_FILE=/var/nirvashare/dbpass
 
 terminate()
