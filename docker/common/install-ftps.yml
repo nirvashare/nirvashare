@@ -11,7 +11,7 @@ services:
     ports:
       # Public HTTP Port:
       - '21:8021'
-      - '65000-65500:65000-65500/tcp'
+      - '65000-65025:65000-65025'
     environment:
       ns_db_jdbc_url: "jdbc:postgresql://nirvashare_database:5432/postgres"
       ns_db_username: "nirvashare"

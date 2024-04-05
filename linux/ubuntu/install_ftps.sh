@@ -30,61 +30,23 @@ while true; do
 done
 
 
-if [ ! -e /var/nirvashare/install-app.yml ]
+if [ -ne /var/nirvashare/install-app.yml ]
 then
-
-	while true; do
-	  read -s -p "Enter database password: " NS_DBPASSWORD
-	  echo
-	  read -s -p "Confirm database password: " NS_DBPASSWORD2
-	  echo
-	  size=${#NS_DBPASSWORD}
-	  
-	  if [ "${size}" -lt "6"  ] 
-	  then 
-	       echo "Password length should be atleast 6 characters."
-	  elif   [ "$NS_DBPASSWORD" != "$NS_DBPASSWORD2"   ] 
-	  then 
-	       echo "Passwords not matching, please re-enter"
-	   else 
-	   break
-
-	   fi	  
-	  
-	done
-	
-	mkdir -p /var/nirvashare
-	create_pass_file
-
+    echo
+    echo "Please install other required NirvaShare services."
+    terminate
 
 fi
-
-
 
 if [ -e /var/nirvashare/install-ftps.yml ]
 then
     echo
-    echo "FTPS is already installed in this system."
+    echo "FTPS service is already installed in this system."
     terminate
 
 fi
 
 
-
-sudo apt update
-# docker
-
-sudo apt install -yq apt-transport-https ca-certificates curl software-properties-common
-
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-
-sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-
-sudo apt update
-
-apt-cache policy docker-ce
-
-sudo apt install -yq docker-ce
 
 # docker-compose
 
@@ -98,7 +60,7 @@ sudo chmod +x /usr/local/bin/docker-compose
 
 sudo curl -L "https://raw.githubusercontent.com/nirvashare/nirvashare/main/docker/common/install-ftps.yml" -o /var/nirvashare/install-ftps.yml
 
-
+export COMPOSE_IGNORE_ORPHANS=true
 docker-compose -f /var/nirvashare/install-ftps.yml up -d
 
 echo ""
