@@ -28,7 +28,7 @@ create_pass_sql()
 {
 
 	# create the password file
-        echo "ALTER USER oc_admin WITH PASSWORD '$NS_DBPASSWORD';" > ${NS_SQL_FILE}    
+        echo "ALTER USER nirvashare WITH PASSWORD '$NS_DBPASSWORD';" > ${NS_SQL_FILE}    
 
 }
 
