@@ -111,12 +111,15 @@ change_pass()
 {
 
     cat ${NS_SQL_FILE} | docker exec -i nirvashare_database psql -U nirvashare
+    echo "Updated database password."
+
 
 }
 
 update_pass_file()
 {
     echo $NS_DBPASSWORD > ${DB_PASS_FILE} 
+    echo "Updated configuration."
 }
 
 
@@ -134,17 +137,23 @@ restart_nirvashare()
     fi
 }
 
+cleanup()
+{
+   
+    rm ${NS_SQL_FILE}    
+}
 
 check_installation
 prompt_password
 create_pass_sql
-#change_pass
+change_pass
 update_pass_file
+restart_nirvashare
 cleanup
 
 
 echo ""
 echo "Password Updated Successfully!"
 echo ""
-echo "NOTE - Please wait for couple of minutes for the services to start automatically."
+echo "NOTE - Please wait for couple of minutes for the services to come up."
 echo ""
