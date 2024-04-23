@@ -8,8 +8,8 @@ BACKUP_TEMP_FOLDER=/var/nirvashare/bk-temp
 BACKUP_FOLDER=/var/nirvashare/backup
 CONFIG_FILE=/var/nirvashare/config.properties
 DOCKER_FILE=/var/nirvashare/install-app.yml
-DOCKER_FILE_FTPS="/var/nirvashare/install-ftps.yml"
-DB_PASS_FILE=/var/nirvashare/dbpass
+DOCKER_FILE_FTPS=/var/nirvashare/install-ftps.yml
+
 
 
 terminate()
@@ -124,9 +124,7 @@ restore_backup() {
     if [ -e "${BACKUP_TEMP_FOLDER}/config.properties" ]; then
 	    cp ${BACKUP_TEMP_FOLDER}/config.properties ${CONFIG_FILE}
     fi
-    if [ -e "${BACKUP_TEMP_FOLDER}/dbpass" ]; then
-	    cp ${BACKUP_TEMP_FOLDER}/dbpass ${DB_PASS_FILE}
-    fi    
+    
 
 
     echo "Restore Completed Successfully!"
