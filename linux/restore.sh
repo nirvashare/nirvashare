@@ -107,6 +107,19 @@ restart_nirvashare()
     fi
 }
 
+stop_nirvashare()
+{
+    echo "Stopping NirvaShare Services"
+    echo ""
+    export COMPOSE_IGNORE_ORPHANS=true
+    
+    docker-compose -f $DOCKER_FILE stop admin userapp search
+    
+    if [ -e "$DOCKER_FILE_FTPS" ]; then
+        docker-compose -f $DOCKER_FILE_FTPS stop
+    fi
+}
+
 restore_backup() {
 
     if [ -e "$BACKUP_TEMP_FOLDER" ]; then
@@ -116,6 +129,8 @@ restore_backup() {
     mkdir $BACKUP_TEMP_FOLDER
     tar -xzf ${BACKUP_FILE}  -C ${BACKUP_TEMP_FOLDER}
     check_status
+    
+    stop_nirvashare
     
     echo "Restore of database started."    
 
