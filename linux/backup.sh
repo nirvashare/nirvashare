@@ -72,7 +72,7 @@ create_backup() {
     if [ ! -e "$BACKUP_FOLDER" ]; then
 	    mkdir ${BACKUP_FOLDER}
     fi
-    FILE_NAME=ns_backup_`date +%Y-%m-%d"_"%H_%M_%S`.tar.gz
+    FILE_NAME=ns_backup_`date +%Y-%m-%d"_"%H%M%S`.tar.gz
 
     tar -czf  ${BACKUP_FOLDER}/${FILE_NAME}  -C ${BACKUP_TEMP_FOLDER} $(ls ${BACKUP_TEMP_FOLDER})
     check_status
