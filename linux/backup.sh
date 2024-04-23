@@ -45,10 +45,11 @@ user_prompt()
 create_backup() {
 
     if [ -e "$BACKUP_TEMP_FOLDER" ]; then
-    	rm -rf $BACKUP_TEMP_FOLDER
+    	rm $BACKUP_TEMP_FOLDER/*
+    	rmdir $BACKUP_TEMP_FOLDER
     fi
     mkdir $BACKUP_TEMP_FOLDER
-    docker exec -t nirvashare_database pg_dumpall -c -U nirvashare > ${BACKUP_TEMP_FOLDER}/db-dump.sql
+#    docker exec -t nirvashare_database pg_dumpall -c -U nirvashare > ${BACKUP_TEMP_FOLDER}/db-dump.sql
     
     if [ -e "$CONFIG_FILE" ]; then
 	    cp ${CONFIG_FILE} ${BACKUP_TEMP_FOLDER}/
@@ -89,8 +90,8 @@ check_installation() {
 
 cleanup()
 {
-   echo 
- #   rm ${NS_SQL_FILE}    
+    rm $BACKUP_TEMP_FOLDER/*
+    rmdir $BACKUP_TEMP_FOLDER
 }
 
 check_installation
