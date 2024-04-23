@@ -6,6 +6,7 @@
 
 
 DOCKER_FILE="/var/nirvashare/install-app.yml"
+DOCKER_FILE_FTPS="/var/nirvashare/install-ftps.yml"
 DB_PASS_FILE=/var/nirvashare/dbpass
 
 NS_SQL_FILE=pass_reset.sql

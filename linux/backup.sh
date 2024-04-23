@@ -8,7 +8,7 @@ BACKUP_TEMP_FOLDER=/var/nirvashare/bk-temp
 BACKUP_FOLDER=/var/nirvashare/backup
 CONFIG_FILE=/var/nirvashare/config.properties
 DOCKER_FILE=/var/nirvashare/install-app.yml
-
+DB_PASS_FILE=/var/nirvashare/dbpass
 
 terminate()
 {
@@ -24,7 +24,7 @@ user_prompt()
 {
 
 	echo ""
-	echo "NirvaShare Backup Utility."
+	echo "NirvaShare Data Backup Utility."
 	echo ""
 
 	echo "This utility will allow you to take backup of entire database and the configurations of NirvaShare."
@@ -67,6 +67,10 @@ create_backup() {
     
     if [ -e "$CONFIG_FILE" ]; then
 	    cp ${CONFIG_FILE} ${BACKUP_TEMP_FOLDER}/
+    fi
+    
+    if [ -e "$DB_PASS_FILE" ]; then
+	    cp ${DB_PASS_FILE} ${BACKUP_TEMP_FOLDER}/
     fi
     
     if [ ! -e "$BACKUP_FOLDER" ]; then
