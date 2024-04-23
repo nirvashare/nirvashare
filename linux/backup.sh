@@ -28,19 +28,31 @@ user_prompt()
 	echo ""
 
 	echo "This utility will allow you to take backup of entire database and the configurations of NirvaShare."
-	while true; do
+
+       if [ "${NS_SILENT}" != 'true'  ]; then
+   	  while true; do
 	    read -p "Do you want to backup now? (y/n)? " yn
 	    case $yn in
 		[Yy] ) break;;
 		[Nn] ) terminate; exit;;
 		* ) echo "Please answer yes or no (y/n).";;
 	    esac
-	done
-
+	  done
+	  
+      else 
+          echo "Silent mode enabled"
+      fi
 	echo ""
 	echo ""
 }
 
+check_status() 
+{
+    if [ "$?" -eq "1" ]; then
+      terminate
+    fi
+
+}
 
 create_backup() {
 
@@ -51,6 +63,7 @@ create_backup() {
     mkdir $BACKUP_TEMP_FOLDER
     echo "Backup of database started."    
     docker exec -t nirvashare_database pg_dumpall -c -U nirvashare > ${BACKUP_TEMP_FOLDER}/db-dump.sql
+    check_status
     
     if [ -e "$CONFIG_FILE" ]; then
 	    cp ${CONFIG_FILE} ${BACKUP_TEMP_FOLDER}/
@@ -62,14 +75,14 @@ create_backup() {
     FILE_NAME=ns_backup_`date +%Y-%m-%d"_"%H_%M_%S`.tar.gz
 
     tar -czf  ${BACKUP_FOLDER}/${FILE_NAME}  -C ${BACKUP_TEMP_FOLDER} $(ls ${BACKUP_TEMP_FOLDER})
-
+    check_status
 
     echo "Backup Created Successfully!"
     echo ""
     
     echo "Location - ${BACKUP_FOLDER}/${FILE_NAME}"
     echo ""
-    
+    export NS_BACKUP_FILE=${BACKUP_FOLDER}/${FILE_NAME}
 }
 
 
@@ -92,8 +105,11 @@ check_installation() {
 
 cleanup()
 {
-    rm $BACKUP_TEMP_FOLDER/*
-    rmdir $BACKUP_TEMP_FOLDER
+    if [ -e "$BACKUP_TEMP_FOLDER" ]; then
+    	rm $BACKUP_TEMP_FOLDER/*
+	rmdir $BACKUP_TEMP_FOLDER
+    fi	    
+	    
 }
 
 check_installation
