@@ -50,7 +50,7 @@ create_backup() {
     fi
     mkdir $BACKUP_TEMP_FOLDER
     echo "Backup of database started."    
-    docker exec -t nirvashare_database pg_dumpall -c -U nirvashare > ${BACKUP_TEMP_FOLDER}/db-dump.sql
+#    docker exec -t nirvashare_database pg_dumpall -c -U nirvashare > ${BACKUP_TEMP_FOLDER}/db-dump.sql
     
     if [ -e "$CONFIG_FILE" ]; then
 	    cp ${CONFIG_FILE} ${BACKUP_TEMP_FOLDER}/
@@ -68,6 +68,7 @@ create_backup() {
     echo ""
     
     echo "Location - ${BACKUP_FOLDER}/${FILE_NAME}"
+    echo ""
     
 }
 
