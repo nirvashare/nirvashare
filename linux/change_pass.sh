@@ -72,9 +72,9 @@ then
 user_prompt
 
 while true; do
-  read -s -p "Enter database password: " NS_DBPASSWORD
+  read -s -p "Enter the new database password: " NS_DBPASSWORD
   echo
-  read -s -p "Confirm database password: " NS_DBPASSWORD2
+  read -s -p "Re-confirm database password: " NS_DBPASSWORD2
   echo
   size=${#NS_DBPASSWORD}
   
