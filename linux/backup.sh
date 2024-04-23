@@ -8,7 +8,7 @@ BACKUP_TEMP_FOLDER=/var/nirvashare/bk-temp
 BACKUP_FOLDER=/var/nirvashare/backup
 CONFIG_FILE=/var/nirvashare/config.properties
 DOCKER_FILE=/var/nirvashare/install-app.yml
-
+DB_PASS_FILE=/var/nirvashare/dbpass
 
 terminate()
 {
@@ -69,7 +69,9 @@ create_backup() {
 	    cp ${CONFIG_FILE} ${BACKUP_TEMP_FOLDER}/
     fi
     
-
+    if [ -e "$DB_PASS_FILE" ]; then
+	    cp ${DB_PASS_FILE} ${BACKUP_TEMP_FOLDER}/
+    fi
     
     if [ ! -e "$BACKUP_FOLDER" ]; then
 	    mkdir ${BACKUP_FOLDER}

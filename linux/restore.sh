@@ -9,7 +9,7 @@ BACKUP_FOLDER=/var/nirvashare/backup
 CONFIG_FILE=/var/nirvashare/config.properties
 DOCKER_FILE=/var/nirvashare/install-app.yml
 DOCKER_FILE_FTPS=/var/nirvashare/install-ftps.yml
-
+DB_PASS_FILE=/var/nirvashare/dbpass
 
 
 terminate()
@@ -118,13 +118,16 @@ restore_backup() {
     check_status
     
     echo "Restore of database started."    
-    docker exec -t nirvashare_database pg_dumpall -c -U nirvashare > ${BACKUP_TEMP_FOLDER}/db-dump.sql
+
+    cat ${BACKUP_TEMP_FOLDER}/db-dump.sql | docker exec -i nirvashare_database psql -U nirvashare
     check_status
     
     if [ -e "${BACKUP_TEMP_FOLDER}/config.properties" ]; then
 	    cp ${BACKUP_TEMP_FOLDER}/config.properties ${CONFIG_FILE}
     fi
-    
+    if [ -e "${BACKUP_TEMP_FOLDER}/dbpass" ]; then
+	    cp ${BACKUP_TEMP_FOLDER}/dbpass ${DB_PASS_FILE}
+    fi    
 
 
     echo "Restore Completed Successfully!"
