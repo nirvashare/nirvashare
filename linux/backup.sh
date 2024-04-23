@@ -49,6 +49,7 @@ create_backup() {
     	rmdir $BACKUP_TEMP_FOLDER
     fi
     mkdir $BACKUP_TEMP_FOLDER
+    echo "Backup of database started."    
 #    docker exec -t nirvashare_database pg_dumpall -c -U nirvashare > ${BACKUP_TEMP_FOLDER}/db-dump.sql
     
     if [ -e "$CONFIG_FILE" ]; then
