@@ -134,7 +134,7 @@ restore_backup() {
     
     echo "Restore of database started."    
 
-    cat ${BACKUP_TEMP_FOLDER}/db-dump.sql | docker exec -i nirvashare_database psql -U nirvashare
+    cat ${BACKUP_TEMP_FOLDER}/db-dump.sql | docker exec -i nirvashare_database psql -U nirvashare &> ns_db_restore.log
     check_status
     
     if [ -e "${BACKUP_TEMP_FOLDER}/config.properties" ]; then
