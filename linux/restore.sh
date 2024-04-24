@@ -165,9 +165,8 @@ check_installation() {
 final_message()
 {
 
-    echo "Restore Completed Successfully!"
     echo ""
-    
+    echo "Restore Completed Successfully!"    
     echo ""
 
 }
@@ -188,6 +187,6 @@ check_installation
 restore_backup
 restart_nirvashare
 cleanup
-
+final_message
 
 
