@@ -132,7 +132,7 @@ restore_backup() {
     
     stop_nirvashare
     
-    echo "Restore of database started."    
+    echo "Restoring data from the backup."    
 
     cat ${BACKUP_TEMP_FOLDER}/db-dump.sql | docker exec -i nirvashare_database psql -U nirvashare &> ns_db_restore.log
     check_status
@@ -145,10 +145,7 @@ restore_backup() {
     fi    
 
 
-    echo "Restore Completed Successfully!"
-    echo ""
-    
-    echo ""
+
 
 }
 
@@ -165,7 +162,15 @@ check_installation() {
     fi
 }
 
+final_message()
+{
 
+    echo "Restore Completed Successfully!"
+    echo ""
+    
+    echo ""
+
+}
 
 
 
