@@ -168,6 +168,8 @@ final_message()
     echo ""
     echo "Restore Completed Successfully!"    
     echo ""
+    echo "NOTE - Please wait for couple of minutes for the services to come up."
+    echo ""
 
 }
 
