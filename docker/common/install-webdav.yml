@@ -1,0 +1,32 @@
+version: "3"
+services:
+
+  webdav:
+    image: 'nirvato/nirvashare-webdav:latest'
+    container_name: 'nirvashare_webdav'
+    user: root
+    networks:
+      - nirvashare
+    restart: always
+    ports:
+      # Public HTTP Port:
+      - '8082:8080'
+    environment:
+      ns_db_jdbc_url: "jdbc:postgresql://nirvashare_database:5432/postgres"
+      ns_db_username: "nirvashare"
+      ns_db_password_file: "/run/secrets/db_password"
+      
+    secrets:
+      - db_password
+
+    volumes:
+      - /var/nirvashare:/var/nirvashare
+
+secrets:
+   db_password:
+     file: dbpass
+
+networks:
+  nirvashare: {}
+
+
