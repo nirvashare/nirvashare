@@ -98,10 +98,25 @@ update_config() {
     fi
 }
 
+remove_webdav() {
+    WEBDAV_FILE=/var/nirvashare/install-webdav.yml
+    if [ -f "$WEBDAV_FILE" ]; then
+        echo "Removing Webdav service"
+
+        #check if webdav install file and remove it.
+       docker-compose -f $WEBDAV_FILE rm -f --stop
+       rm $WEBDAV_FILE
+
+    fi
+}
+
+
+
 
 user_prompt
 update_docker_compose
 update_config
+remove_webdav
 update_nirvashare
 cleanup
 
