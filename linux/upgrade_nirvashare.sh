@@ -119,7 +119,7 @@ fi
 }
 
 
-
+check_root
 user_prompt
 update_docker_compose
 update_config
