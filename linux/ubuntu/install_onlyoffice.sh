@@ -45,14 +45,19 @@ user_prompt()
 
 
 
+
+
+
 	while true; do
-	  read -s "Enter secret key: " NS_SECRET_KEY
+	  read -p "Enter secret key: " NS_SECRET_KEY
 	  echo
 	  size=${#NS_SECRET_KEY}
 	  
-	  if [ "${size}" -lt "32"  ] 
+	 if [[ ! "$NS_SECRET_KEY" =~ ^[a-zA-Z0-9]+$ ]]; then
+		  echo "❌ Invalid: only letters and numbers allowed, no spaces or special characters."
+	  elif [ "${size}" -lt "32"  ] 
 	  then 
-	       echo "Secret key length should be atleast 32 characters."	  
+	       echo "❌ Secret key length should be atleast 32 characters."	  
 	   else 
 	  	 break
 	   fi	  
@@ -97,7 +102,7 @@ install_onlyoffice() {
 installation_complete() {
 
 	echo ""
-	echo "Installation Completed."
+	echo "✅  Installation Completed."
 	echo ""	
 
 }
