@@ -15,16 +15,9 @@ services:
       JWT_ENABLED: "true"
       JWT_SECRET: "__NS_SECRET__"
       ALLOW_PRIVATE_IP_ADDRESS: "true"
-      
-    secrets:
-      - jwt_secret
 
     volumes:
       - /var/nirvashare:/var/nirvashare
-
-secrets:
-   jwt_secret:
-     file: jwt_secret
 
 networks:
   nirvashare: {}
