@@ -31,7 +31,8 @@ user_prompt()
 
 	if [ -z "$NS_SECRET_KEY" ]
 	then
-
+	
+	echo ""
 	echo "This utility will install Onlyoffice with NirvaShare service."
 	echo ""
 	while true; do
@@ -49,7 +50,8 @@ user_prompt()
 
 
 	while true; do
-	  read -p "Enter secret key: " NS_SECRET_KEY
+	  echo
+	  read -p "Enter new secret key: " NS_SECRET_KEY
 	  echo
 	  size=${#NS_SECRET_KEY}
 	  
