@@ -10,7 +10,7 @@ services:
     restart: always
     ports:
       # Public HTTP Port:
-      - '8084:80'
+      - '8085:80'
     environment:
       JWT_ENABLED: "true"
       JWT_SECRET: "__NS_SECRET__"
