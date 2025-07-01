@@ -46,8 +46,12 @@
 		if [ -z "$NS_DBPASSWORD" ]
 		then
 
-		echo "This utility will install NirvaShare software."
+		echo "NirvaShare Installation Utility."
 		echo ""
+		echo "This script will install NirvaShare along with its core services and dependencies."
+		echo "Make sure you have root or sudo access before proceeding."
+		echo ""
+		echo ""		
 		while true; do
 		    read -p "Do you want to continue? (y/n)? " yn
 		    case $yn in
@@ -60,7 +64,7 @@
 
 
 		while true; do
-		  read -s -p "Enter database password: " NS_DBPASSWORD
+		  read -s -p "Enter new database password: " NS_DBPASSWORD
 		  echo
 		  read -s -p "Confirm database password: " NS_DBPASSWORD2
 		  echo
