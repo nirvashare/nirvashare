@@ -30,8 +30,10 @@
 
 
 	echo ""
-	echo "NirvaShare Software Installation."
+	echo "NirvaShare Installation Utility."
 	echo ""
+	echo "This script will install NirvaShare along with its core services and dependencies."
+	echo "Make sure you have root or sudo access before proceeding."
 
 	user_prompt()
 	{
@@ -46,10 +48,7 @@
 		if [ -z "$NS_DBPASSWORD" ]
 		then
 
-		echo "NirvaShare Installation Utility."
-		echo ""
-		echo "This script will install NirvaShare along with its core services and dependencies."
-		echo "Make sure you have root or sudo access before proceeding."
+
 		echo ""
 		echo ""		
 		while true; do
