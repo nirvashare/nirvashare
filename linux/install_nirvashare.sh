@@ -198,7 +198,15 @@
 		    case "$ID" in
 			ubuntu|debian) install_docker_debian ;;
 			centos|rocky|almalinux) install_docker_centos ;;
-			rhel) install_docker_rhel ;;
+			rhel)
+				if [[ "$VERSION_ID" == 7* ]]; then
+				    echo "RHEL 7 detected"
+				    install_docker_centos
+				else
+				    echo "RHEL $VERSION_ID detected"
+				    install_docker_rhel
+				fi
+				;;
 			fedora) install_docker_fedora ;;
 			sles|opensuse-leap|opensuse-tumbleweed) install_docker_suse ;;		
 			arch) install_docker_arch ;;
@@ -212,9 +220,13 @@
 		    exit 1
 		fi
 
-		# Verify Docker installation
-		echo "Verifying Docker installation..."
-		docker --version && echo "Docker installed successfully!" || echo "Docker installation failed."
+		 echo "Verifying Docker installation..."
+	    if docker --version >/dev/null 2>&1; then
+		echo "Docker installed successfully!"
+	    else
+		echo "Docker installation failed."
+		terminate; exit;
+	    fi
 
 
 	}
