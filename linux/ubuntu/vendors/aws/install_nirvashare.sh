@@ -8,6 +8,7 @@ echo ""
 echo "Generating a random database password"
 NS_DBPASSWORD=$(openssl rand -hex 6)
 
+DB_PASS_FILE=/var/nirvashare/dbpass
 
 if [ -z "$NS_DBPASSWORD" ]
 then
@@ -47,9 +48,11 @@ sudo chmod +x /usr/local/bin/docker-compose
 # NirvaShare installation
 
 mkdir -p /var/nirvashare
-sudo curl -L "https://raw.githubusercontent.com/nirvashare/nirvashare/main/docker/common/install-app.yml" -o /var/nirvashare/install_file
+#sudo curl -L "https://raw.githubusercontent.com/nirvashare/nirvashare/main/docker/common/install-app.yml" -o /var/nirvashare/install_file
+sudo curl -L "https://raw.githubusercontent.com/nirvashare/nirvashare/main/docker/common/install-app.yml" -o /var/nirvashare/install-app.yml
 
-cat /var/nirvashare/install_file  | sed -e "s/__DB_PASS__/$NS_DBPASSWORD/" >> /var/nirvashare/install-app.yml
+echo $NS_DBPASSWORD > ${DB_PASS_FILE}
+#cat /var/nirvashare/install_file  | sed -e "s/__DB_PASS__/$NS_DBPASSWORD/" >> /var/nirvashare/install-app.yml
 
 
 docker-compose -f /var/nirvashare/install-app.yml pull
