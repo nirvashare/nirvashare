@@ -75,8 +75,18 @@ done
 >&2 echo "AdminConsole is up"
 
 echo "Changing admin password"
-INSTANCEID=$(curl -sL http://169.254.169.254/latest/meta-data/instance-id) 
+
+# Get IMDSv2 token (valid for 6 hours)
+TOKEN=$(curl -sX PUT "http://169.254.169.254/latest/api/token" \
+              -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
+
+# Query the instance ID using the token
+INSTANCEID=$(curl -sH "X-aws-ec2-metadata-token: $TOKEN" \
+                  http://169.254.169.254/latest/meta-data/instance-id)
+
+# Save instance ID to file
 echo "$INSTANCEID" >/var/nirvashare/set_password
+
 
 docker restart nirvashare_admin
 echo "Restarted adminconsole"
