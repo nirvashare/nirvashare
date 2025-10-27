@@ -1,4 +1,8 @@
 {
   "version":"6.4.0",
-  "type":"release"
+  "type":"release",  
+  "windows_url": "https://pub-e740d61bb68a4c80814239053557a305.r2.dev/binaries/nirvashare_app.exe",
+  "mac_url": "https://example.com/updates/MyApp_1.1.2.dmg",
+  "linux_url": "https://example.com/updates/MyApp_1.1.2.AppImage",
+  "release_notes": "https://nirvashare.com/release-notes"
 }
