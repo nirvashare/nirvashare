@@ -238,11 +238,6 @@
 
 	install_docker_compose()
 	{
-
-		sudo curl -L "https://github.com/docker/compose/releases/download/v2.23.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-
-		sudo chmod +x /usr/local/bin/docker-compose
-
 		# NirvaShare installation
 
 		mkdir -p /var/nirvashare
@@ -255,11 +250,28 @@
 			sudo curl -L "https://raw.githubusercontent.com/nirvashare/nirvashare/main/docker/common/install-app.yml" -o /var/nirvashare/install-app.yml		
 		fi
 
-
-
-		#cat /var/nirvashare/install_file  | sed -e "s/__DB_PASS__/$NS_DBPASSWORD/" >> /var/nirvashare/install-app.yml
 		export COMPOSE_IGNORE_ORPHANS=true
-		/usr/local/bin/docker-compose -f /var/nirvashare/install-app.yml up -d
+		
+		if [ -f /etc/os-release ]; then
+		    . /etc/os-release
+
+		    if [ "$ID" = "debian" ] || [ "$ID" = "ubuntu" ]; then
+			docker compose -f /var/nirvashare/install-app.yml up -d
+		    else
+			sudo curl -L "https://github.com/docker/compose/releases/download/v2.23.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+			sudo chmod +x /usr/local/bin/docker-compose		
+			
+			/usr/local/bin/docker-compose -f /var/nirvashare/install-app.yml up -d
+		    
+		    fi
+
+		else
+		    echo "Cannot determine OS. Exiting."
+		    exit 1
+		fi
+
+
+
 
 	}
 
