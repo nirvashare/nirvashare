@@ -96,7 +96,7 @@ install_onlyoffice() {
 
 	export COMPOSE_IGNORE_ORPHANS=true
 	cat /var/nirvashare/install-onlyoffice  | sed -e "s/__NS_SECRET__/$NS_SECRET_KEY/" >> /var/nirvashare/install-onlyoffice.yml
-	docker-compose -f /var/nirvashare/install-onlyoffice.yml up -d
+	docker compose -f /var/nirvashare/install-onlyoffice.yml up -d
 
 
 }
