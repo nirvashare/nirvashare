@@ -245,9 +245,12 @@
 		
 		if [ "$NS_TEST" = "true" ]
 		then
-			sudo curl -L "https://raw.githubusercontent.com/nirvashare/nirvashare/main/docker/common/install-app-test.yml" -o /var/nirvashare/install-app.yml		
-		else 
-			sudo curl -L "https://raw.githubusercontent.com/nirvashare/nirvashare/main/docker/common/install-app.yml" -o /var/nirvashare/install-app.yml		
+		    sudo curl -L "https://raw.githubusercontent.com/nirvashare/nirvashare/main/docker/common/install-app-test.yml" -o /var/nirvashare/install-app.yml
+		elif [ "$NS_BETA" = "true" ]
+		then
+		    sudo curl -L "https://raw.githubusercontent.com/nirvashare/nirvashare/main/docker/common/install-app-beta.yml" -o /var/nirvashare/install-app.yml
+		else
+		    sudo curl -L "https://raw.githubusercontent.com/nirvashare/nirvashare/main/docker/common/install-app.yml" -o /var/nirvashare/install-app.yml
 		fi
 
 		export COMPOSE_IGNORE_ORPHANS=true
