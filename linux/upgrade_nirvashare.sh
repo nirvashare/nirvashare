@@ -36,6 +36,49 @@ cleanup()
     rm /var/nirvashare/install_file &>/dev/null
 }
 
+upgrade_docker() {
+
+    if [ -f /etc/os-release ]; then
+        . /etc/os-release
+        OS=$ID
+    else
+        echo "Cannot detect OS"
+        exit 1
+    fi
+
+    echo "Detected OS: $OS"
+
+    case "$OS" in
+
+        ubuntu|debian)
+            echo "Upgrading Docker on Ubuntu/Debian..."
+            sudo apt update
+            sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+            ;;
+
+        rhel|centos)
+            echo "Upgrading Docker on RHEL/CentOS..."
+            sudo yum install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+            ;;
+
+        sles|suse)
+            echo "Upgrading Docker on SLES..."
+            sudo zypper install -y docker
+            ;;
+
+        *)
+            echo "Unsupported OS: $OS"
+            exit 1
+            ;;
+    esac
+
+    echo "Restarting Docker..."
+    sudo systemctl restart docker
+
+    echo "Docker version after upgrade:"
+    docker --version
+}
+
 
 update_configuration()
 {
@@ -72,7 +115,7 @@ user_prompt()
 	echo "NirvaShare Upgrade Utility."
 	echo ""
 
-	echo "This will upgrade NirvaShare applications to latest version."
+	echo "This will upgrade NirvaShare to the latest version. Supporting components such as **Docker CE may also be updated if required."
 	while true; do
 	    read -p "Do you want to continue? (y/n)? " yn
 	    case $yn in
@@ -121,7 +164,8 @@ fi
 
 check_root
 user_prompt
-update_docker_compose
+upgrade_docker
+#update_docker_compose
 update_config
 remove_webdav
 update_nirvashare
