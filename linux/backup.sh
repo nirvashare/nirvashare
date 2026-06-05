@@ -1,8 +1,21 @@
 #!/bin/bash
 
+###############################################################################
+# NirvaShare Data Backup Utility
 #
-# Change password script
+# Copyright (c) 2020-2026 NirvaShare.
+# All Rights Reserved.
 #
+# Purpose:
+#   Creates a backup of the NirvaShare database and configuration files.
+#
+# This software and associated documentation are proprietary to NirvaShare.
+# Unauthorized copying, modification, distribution, or use of this software,
+# via any medium, is strictly prohibited except as expressly permitted by
+# NirvaShare.
+###############################################################################
+
+set -euo pipefail
 
 BACKUP_TEMP_FOLDER=/var/nirvashare/bk-temp
 BACKUP_FOLDER=/var/nirvashare/backup
@@ -17,108 +30,102 @@ terminate()
     exit 1
 }
 
+cleanup()
+{
+    rm -rf "$BACKUP_TEMP_FOLDER"
+}
 
+error_handler()
+{
+    echo ""
+    echo "ERROR: Backup failed."
+    cleanup
+    exit 1
+}
 
+trap error_handler ERR
 
 user_prompt()
 {
+    echo ""
+    echo "NirvaShare Data Backup Utility."
+    echo ""
 
-	echo ""
-	echo "NirvaShare Data Backup Utility."
-	echo ""
+    echo "This utility will allow you to take backup of entire database and the configurations of NirvaShare."
 
-	echo "This utility will allow you to take backup of entire database and the configurations of NirvaShare."
+    if [ "${NS_SILENT:-false}" != "true" ]; then
+        while true; do
+            read -p "Do you want to backup now? (y/n)? " yn
 
-       if [ "${NS_SILENT}" != 'true'  ]; then
-   	  while true; do
-	    read -p "Do you want to backup now? (y/n)? " yn
-	    case $yn in
-		[Yy] ) break;;
-		[Nn] ) terminate; exit;;
-		* ) echo "Please answer yes or no (y/n).";;
-	    esac
-	  done
-	  
-      else 
-          echo "Silent mode enabled"
-      fi
-	echo ""
-	echo ""
+            case $yn in
+                [Yy] ) break ;;
+                [Nn] ) terminate ;;
+                * ) echo "Please answer yes or no (y/n)." ;;
+            esac
+        done
+    else
+        echo "Silent mode enabled"
+    fi
+
+    echo ""
 }
 
-check_status() 
+create_backup()
 {
-    if [ "$?" -eq "1" ]; then
-      terminate
+    rm -rf "$BACKUP_TEMP_FOLDER"
+    mkdir -p "$BACKUP_TEMP_FOLDER"
+
+    echo "Backup of database started."
+
+    docker exec -i nirvashare_database \
+        pg_dumpall -c -U nirvashare \
+        > "$BACKUP_TEMP_FOLDER/db-dump.sql"
+
+    if [ ! -s "$BACKUP_TEMP_FOLDER/db-dump.sql" ]; then
+        echo "Database backup file is empty."
+        exit 1
     fi
 
-}
-
-create_backup() {
-
-    if [ -e "$BACKUP_TEMP_FOLDER" ]; then
-    	rm $BACKUP_TEMP_FOLDER/*
-    	rmdir $BACKUP_TEMP_FOLDER
+    if [ -f "$CONFIG_FILE" ]; then
+        cp "$CONFIG_FILE" "$BACKUP_TEMP_FOLDER/"
     fi
-    mkdir $BACKUP_TEMP_FOLDER
-    echo "Backup of database started."    
-    docker exec -t nirvashare_database pg_dumpall -c -U nirvashare > ${BACKUP_TEMP_FOLDER}/db-dump.sql
-    check_status
-    
-    if [ -e "$CONFIG_FILE" ]; then
-	    cp ${CONFIG_FILE} ${BACKUP_TEMP_FOLDER}/
-    fi
-    
-    if [ -e "$DB_PASS_FILE" ]; then
-	    cp ${DB_PASS_FILE} ${BACKUP_TEMP_FOLDER}/
-    fi
-    
-    if [ ! -e "$BACKUP_FOLDER" ]; then
-	    mkdir ${BACKUP_FOLDER}
-    fi
-    FILE_NAME=ns_backup_`date +%Y-%m-%d"_"%H%M%S`.tar.gz
 
-    tar -czf  ${BACKUP_FOLDER}/${FILE_NAME}  -C ${BACKUP_TEMP_FOLDER} $(ls ${BACKUP_TEMP_FOLDER})
-    check_status
+    if [ -f "$DB_PASS_FILE" ]; then
+        cp "$DB_PASS_FILE" "$BACKUP_TEMP_FOLDER/"
+    fi
 
+    mkdir -p "$BACKUP_FOLDER"
+
+    FILE_NAME="ns_backup_$(date +%Y-%m-%d_%H%M%S).tar.gz"
+
+    tar -czf \
+        "$BACKUP_FOLDER/$FILE_NAME" \
+        -C "$BACKUP_TEMP_FOLDER" .
+
+    if [ ! -f "$BACKUP_FOLDER/$FILE_NAME" ]; then
+        echo "Backup archive was not created."
+        exit 1
+    fi
+
+    echo ""
     echo "Backup Created Successfully!"
     echo ""
-    
-    echo "Location - ${BACKUP_FOLDER}/${FILE_NAME}"
+    echo "Location - $BACKUP_FOLDER/$FILE_NAME"
     echo ""
-    export NS_BACKUP_FILE=${BACKUP_FOLDER}/${FILE_NAME}
+
+    export NS_BACKUP_FILE="$BACKUP_FOLDER/$FILE_NAME"
 }
 
-
-
-check_installation() {
-    if [ -f "$DOCKER_FILE" ]; then
-        
-        user_prompt
-        
-    else 
-        echo "$DOCKER_FILE does not exist."
-        terminate;
-    fi
-}
-
-
-
-
-
-
-cleanup()
+check_installation()
 {
-    if [ -e "$BACKUP_TEMP_FOLDER" ]; then
-    	rm $BACKUP_TEMP_FOLDER/*
-	rmdir $BACKUP_TEMP_FOLDER
-    fi	    
-	    
+    if [ ! -f "$DOCKER_FILE" ]; then
+        echo "$DOCKER_FILE does not exist."
+        terminate
+    fi
+
+    user_prompt
 }
 
 check_installation
 create_backup
 cleanup
-
-
-
