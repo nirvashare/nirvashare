@@ -108,7 +108,7 @@ restart_nirvashare()
 
     export COMPOSE_IGNORE_ORPHANS=true
 
-    docker-compose -f "$DOCKER_FILE" restart
+    docker compose -f "$DOCKER_FILE" restart
 
     if [ -f "$DOCKER_FILE_FTPS" ]; then
         docker-compose -f "$DOCKER_FILE_FTPS" restart
