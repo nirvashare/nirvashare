@@ -111,7 +111,7 @@ restart_nirvashare()
     docker compose -f "$DOCKER_FILE" restart
 
     if [ -f "$DOCKER_FILE_FTPS" ]; then
-        docker-compose -f "$DOCKER_FILE_FTPS" restart
+        docker compose -f "$DOCKER_FILE_FTPS" restart
     fi
 }
 
@@ -123,10 +123,10 @@ stop_nirvashare()
 
     export COMPOSE_IGNORE_ORPHANS=true
 
-    docker-compose -f "$DOCKER_FILE" stop admin userapp search
+    docker compose -f "$DOCKER_FILE" stop admin userapp search
 
     if [ -f "$DOCKER_FILE_FTPS" ]; then
-        docker-compose -f "$DOCKER_FILE_FTPS" stop
+        docker compose -f "$DOCKER_FILE_FTPS" stop
     fi
 }
 
