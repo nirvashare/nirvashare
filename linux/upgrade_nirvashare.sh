@@ -98,12 +98,23 @@ update_nirvashare()
     echo ""
     export COMPOSE_IGNORE_ORPHANS=true
     
-    docker-compose -f $DOCKER_FILE pull
-    docker-compose -f $DOCKER_FILE up -d
+    
+    if docker compose version >/dev/null 2>&1; then
+    	COMPOSE="docker compose"
+    elif command -v docker-compose >/dev/null 2>&1; then
+        COMPOSE="docker-compose"
+    else
+        echo "Docker Compose is not installed."
+        exit 1
+    fi
+
+    
+    $COMPOSE -f $DOCKER_FILE pull
+    $COMPOSE -f $DOCKER_FILE up -d
     
     if [ -e "$DOCKER_FILE_FTPS" ]; then
-        docker-compose -f $DOCKER_FILE_FTPS pull
-        docker-compose -f $DOCKER_FILE_FTPS up -d
+        $COMPOSE -f $DOCKER_FILE_FTPS pull
+        $COMPOSE -f $DOCKER_FILE_FTPS up -d
     fi
 }
 
@@ -147,7 +158,7 @@ remove_webdav() {
         echo "Removing Webdav service"
 
         #check if webdav install file and remove it.
-       docker-compose -f $WEBDAV_FILE rm -f --stop
+       docker compose -f $WEBDAV_FILE rm -f --stop
        rm $WEBDAV_FILE
 
     fi
