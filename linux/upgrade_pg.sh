@@ -82,7 +82,7 @@ case "$MODE" in
     case "$choice" in
       1|upgrade)  MODE=upgrade ;;
       2|rollback) MODE=rollback ;;
-      *) echo terminate; exit 0 ;;
+      *) terminate; exit 0 ;;
     esac
     ;;
   *) die "Unknown action '$MODE'. Usage: $0 [upgrade|rollback]" ;;
