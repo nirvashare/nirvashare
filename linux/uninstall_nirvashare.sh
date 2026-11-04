@@ -47,6 +47,21 @@ warn() { printf '\033[1;33mWARN: %s\033[0m\n' "$*" >&2; }
 die()  { printf '\033[1;31mERROR: %s\033[0m\n' "$*" >&2; exit 1; }
 run()  { if [ "$DRY_RUN" = "1" ]; then echo "[dry-run] $*"; else "$@"; fi; }
 
+terminate()
+{
+    echo ""
+    echo "Installation terminated"
+    exit 0
+}
+
+check_root() {
+
+	if [ "$(id -u)" -ne 0 ]; then
+	  echo "Error: This script must be run as root."
+	 terminate; exit;
+	fi
+}
+
 # ----------------------------- PREFLIGHT ------------------------------------
 command -v docker >/dev/null || die "docker not found"
 # Safety guard for the directory we are about to wipe
@@ -78,12 +93,21 @@ ask_yn() {   # ask_yn "question"  -> returns 0 for yes, 1 for no (default: no)
   local a; read -r -p "$1 [y/N] " a; [[ "$a" =~ ^[Yy]$ ]]
 }
 
+check_root
+
 if [ "$#" -eq 0 ] && [ -t 0 ]; then
   HAS_BACKUPS=0
   [ -n "$BACKUP_VOLUMES" ] && HAS_BACKUPS=1
   if ls -d "$INSTALL_DIR"/pg_upgrade_backup_* >/dev/null 2>&1; then HAS_BACKUPS=1; fi
 
-  echo "NirvaShare uninstall"
+   echo ""
+   echo "NirvaShare Uninstall Utility."
+   echo ""
+   echo "This script will uninstall NirvaShare along with its core services."
+   echo "Make sure you have root or sudo access before proceeding."
+   echo ""
+   echo ""
+  
   echo "  1) Full uninstall            (remove containers, database data and $INSTALL_DIR)"
   echo "  2) Remove containers only    (keep database data and $INSTALL_DIR)"
   echo "  3) Preview a full uninstall  (dry run, changes nothing)"
@@ -93,7 +117,7 @@ if [ "$#" -eq 0 ] && [ -t 0 ]; then
     1) ;;
     2) KEEP_DATA=1 ;;
     3) DRY_RUN=1 ;;
-    *) echo "Bye."; exit 0 ;;
+    *) terminate; exit 0 ;;
   esac
 
   if ask_yn "Also remove the Docker images?"; then REMOVE_IMAGES=1; fi
