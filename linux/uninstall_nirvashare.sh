@@ -112,6 +112,7 @@ if [ "$#" -eq 0 ] && [ -t 0 ]; then
   echo "  2) Remove containers only    (keep database data and $INSTALL_DIR)"
   echo "  3) Preview a full uninstall  (dry run, changes nothing)"
   echo "  4) Quit"
+  echo ""
   read -r -p "Choose [1-4]: " choice
   case "$choice" in
     1) ;;

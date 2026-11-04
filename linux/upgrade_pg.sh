@@ -41,21 +41,48 @@ log()  { printf '\n\033[1;34m==> %s\033[0m\n' "$*"; }
 warn() { printf '\033[1;33mWARN: %s\033[0m\n' "$*" >&2; }
 die()  { printf '\033[1;31mERROR: %s\033[0m\n' "$*" >&2; exit 1; }
 
+terminate()
+{
+    echo ""
+    echo "Installation terminated"
+    exit 0
+}
+
+check_root() {
+
+	if [ "$(id -u)" -ne 0 ]; then
+	  echo "Error: This script must be run as root."
+	 terminate; exit;
+	fi
+}
+
+
 # ----------------------------- ACTION SELECTION -----------------------------
+check_root
+
 MODE="${1:-}"
 case "$MODE" in
   upgrade|rollback) ;;
   "")
     [ -t 0 ] || die "No action given and no terminal to ask on. Usage: $0 [upgrade|rollback]"
-    echo "NirvaShare PostgreSQL tool"
+   echo ""
+   echo "NirvaShare Database Upgrade Utility."
+   echo ""
+   echo "This script will upgrade NirvaShare database."
+   echo "Make sure you have root or sudo access before proceeding."
+   echo ""
+   echo ""
+   
+    
     echo "  1) Upgrade PostgreSQL 13 -> 17"
     echo "  2) Rollback to PostgreSQL 13 (from the latest backup)"
     echo "  3) Quit"
+    echo ""
     read -r -p "Choose [1-3]: " choice
     case "$choice" in
       1|upgrade)  MODE=upgrade ;;
       2|rollback) MODE=rollback ;;
-      *) echo "Bye."; exit 0 ;;
+      *) echo terminate; exit 0 ;;
     esac
     ;;
   *) die "Unknown action '$MODE'. Usage: $0 [upgrade|rollback]" ;;
