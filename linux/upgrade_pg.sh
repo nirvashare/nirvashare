@@ -74,7 +74,7 @@ case "$MODE" in
    echo ""
    
     
-    echo "  1) Upgrade PostgreSQL 13 -> 17"
+    echo "  1) Upgrade PostgreSQL 13.2 -> 17.11"
     echo "  2) Rollback to PostgreSQL 13 (from the latest backup)"
     echo "  3) Quit"
     echo ""
