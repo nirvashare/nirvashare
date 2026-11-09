@@ -298,11 +298,11 @@ cat <<EOF
 
 Done. PostgreSQL is now $NEW_VERSION, running on the same volume '$VOLUME_NAME'.
 
-  - Test your application (admin :8080, userapp :8081).
+  - Test your application (admin & userapp).
   - Backups (keep until satisfied):
       volume  $BACKUP_VOLUME   full copy of the old PG13 data
       file    $BACKUP_DIR/backup_pg13.sql   logical dump
 
-Rollback:       sudo ./upgrade_pg17.sh rollback
+# Rollback:       sudo ./upgrade_pg17.sh rollback
 Later cleanup:  docker volume rm $BACKUP_VOLUME
 EOF
